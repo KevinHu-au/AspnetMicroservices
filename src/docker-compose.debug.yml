@@ -44,6 +44,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "CacheSettings:ConnectionString=basketdb:6379"
+      - "GrpcSettings:DiscountUrl=discount.grpc"
     depends_on:
       - basketdb
     volumes:
@@ -57,6 +58,22 @@ services:
       dockerfile: Services/Discount/Discount.API/Dockerfile
     ports:
       - 8002:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;"
+    depends_on:
+      - discountdb
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+
+  discount.grpc:
+    image: ${DOCKER_REGISTRY-}discountgrpc
+    container_name: discount.grpc
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
+    ports:
+      - 8003:80
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;"
