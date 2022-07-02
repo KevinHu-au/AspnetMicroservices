@@ -12,7 +12,7 @@ namespace Ordering.Domain.Common
                 return false;
             }
 
-            return left?.Equals(right);
+            return left?.Equals(right) != false;
         }
 
         protected static bool NotEqualOperator(ValueObject left, ValueObject right)
