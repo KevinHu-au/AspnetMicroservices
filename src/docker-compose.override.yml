@@ -30,11 +30,11 @@ services:
   orderdb:
     container_name: orderdb
     environment:
-      SA_PASSWORD: "yourStrong(!)Password"
+      SA_PASSWORD: yourStrong(!)Password
       ACCEPT_EULA: "Y"
     restart: always
     ports:
-      - "1433:1433"
+      - 1433:1433
   pgadmin:
     container_name: pgadmin
     environment:

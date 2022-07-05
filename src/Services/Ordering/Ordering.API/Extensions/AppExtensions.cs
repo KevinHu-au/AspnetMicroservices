@@ -18,14 +18,14 @@ namespace Ordering.API.Extensions
                 try
                 {
                     logger.LogInformation("Migrating the database with context {DbContextName}", typeof(TContext));
-                    seeder(context, services);
+                    InvokeSeeder(seeder, context, services);
+                    logger.LogInformation("Migrated the database with context {DbContextName}", typeof(TContext));
                 }
                 catch (SqlException ex)
                 {
-                    
+                    logger.LogError("data seeding failed with error {Message}", ex.Message);
                     throw;
                 }
-
             }
             return app;
         }
