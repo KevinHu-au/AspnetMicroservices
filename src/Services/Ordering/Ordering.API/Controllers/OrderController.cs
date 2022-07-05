@@ -20,7 +20,7 @@ namespace Ordering.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{useName}", Name = "GetOrders")]
+        [HttpGet("{userName}", Name = "GetOrders")]
         [ProducesResponseType(typeof(IEnumerable<OrderVm>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<OrderVm>>> GetOrdersByUserName(string userName)
         {
