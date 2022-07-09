@@ -1,6 +1,8 @@
 
+using Microsoft.VisualBasic.CompilerServices;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Cache.CacheManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +18,20 @@ builder.Host.ConfigureLogging((hostingContext, loggingBuilder) =>
     loggingBuilder.AddDebug();
 });
 
-builder.Services.AddOcelot();
+builder.Services
+       .AddOcelot()
+       .AddCacheManager(settings => settings.WithDictionaryHandle());
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync("Hello World!");
+    });
+});
 
 await app.UseOcelot();
 
