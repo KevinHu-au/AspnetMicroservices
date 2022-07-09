@@ -55,6 +55,27 @@
 		},
 
 		{
+			"name": ".NET Core Launch Ocelog ApiGateway",
+			"type": "coreclr",
+			"request": "launch",
+			"preLaunchTask": "build",
+			"program": "${workspaceFolder}/src/ApiGateways/OcelotApiGw/bin/Debug/net6.0/OcelotApiGw.dll",
+			"args": [],
+			"cwd": "${workspaceFolder}/src/ApiGateways/OcelotApiGw",
+			"stopAtEntry": false,
+			"serverReadyAction": {
+				"action": "openExternally",
+				"pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+			},
+			"env": {
+				"ASPNETCORE_ENVIRONMENT": "Local"
+			},
+			"sourceFileMap": {
+				"/Views": "${workspaceFolder}/Views"
+			}
+		},
+
+		{
 			"name": ".NET Core Attach",
 			"type": "coreclr",
 			"request": "attach"
