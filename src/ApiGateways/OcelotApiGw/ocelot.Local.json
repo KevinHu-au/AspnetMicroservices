@@ -1,7 +1,7 @@
 {
 	"Routes": [
 		{
-			"DownstreamPathTemplate": "api/v1/Catalog",
+			"DownstreamPathTemplate": "/api/v1/Catalog",
 			"DownstreamScheme": "http",
 			"DownstreamHostAndPorts": [
 				{
@@ -13,7 +13,7 @@
 			"UpstreamHttpMethod": ["GET", "POST", "PUT"]
 		},
 		{
-			"DownstreamPathTemplate": "api/v1/Catalog/{id}",
+			"DownstreamPathTemplate": "/api/v1/Catalog/{id}",
 			"DownstreamScheme": "http",
 			"DownstreamHostAndPorts": [
 				{
@@ -25,7 +25,7 @@
 			"UpstreamHttpMethod": ["GET", "DELETE"]
 		},
 		{
-			"DownstreamPathTemplate": "api/v1/Catalog/GetProductByCategory/{category}",
+			"DownstreamPathTemplate": "/api/v1/Catalog/GetProductByCategory/{category}",
 			"DownstreamScheme": "http",
 			"DownstreamHostAndPorts": [
 				{
@@ -80,7 +80,7 @@
 				"Limit": 1
 			}
 		},
-        
+
         {
             "DownstreamPathTemplate": "/api/v1/Discount/{productName}",
             "DownstreamScheme": "http",
