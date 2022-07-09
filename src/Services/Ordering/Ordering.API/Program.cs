@@ -34,6 +34,8 @@ builder.Services.AddMassTransit(config =>
     });
 });
 
+// builder.Services.AddMassTransitHostedService();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

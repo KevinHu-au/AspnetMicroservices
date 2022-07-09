@@ -28,6 +28,7 @@ namespace Basket.API.Controllers
         }
 
         [HttpGet("{userName}", Name = nameof(GetBasket))]
+        [Route("baskets")]
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCart>> GetBasket(string userName)
         {
