@@ -8,6 +8,6 @@ namespace Shopping.Aggregator.Models
 
         public BasketModel BasketWithProducts { get; set; }
 
-        public IEnumerable<orderResponseModel> orders { get; set; }
+        public IEnumerable<OrderingResponseModel> orders { get; set; }
     }
 }
