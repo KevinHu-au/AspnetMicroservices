@@ -2,12 +2,12 @@ using System;
 
 namespace Shopping.Aggregator.Models
 {
-    public class ShoppingModel
-    {
-        public string UserName { get; set; }
+  public class ShoppingModel
+  {
+    public string UserName { get; set; }
 
-        public BasketModel BasketWithProducts { get; set; }
+    public BasketModel BasketWithProducts { get; set; }
 
-        public IEnumerable<OrderingResponseModel> orders { get; set; }
-    }
+    public IEnumerable<OrderResponseModel> Orders { get; set; }
+  }
 }
