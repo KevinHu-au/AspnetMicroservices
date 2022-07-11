@@ -2,20 +2,20 @@
 using AspnetRunBasics.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
 {
-  c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+  c.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
 {
-  c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+  c.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
 {
-  c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+  c.BaseAddress = new Uri(gatewayAddress);
 });
 
 builder.Services.AddRazorPages();
