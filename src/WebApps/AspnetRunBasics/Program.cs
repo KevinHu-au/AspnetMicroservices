@@ -21,7 +21,6 @@ builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
-app.SeedData();
 
 if (app.Environment.IsDevelopment())
 {
