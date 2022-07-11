@@ -1,22 +1,22 @@
-using AspnetRunBasics.Data;
-using AspnetRunBasics.Repositories;
-using AspnetRunBasics.Extensions;
-using Microsoft.EntityFrameworkCore;
+
+using AspnetRunBasics.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-// add database dependecy
 
-//// use in-memory database
-//builder.Services.AddDbContext<AspnetRunContext>(c =>
-//    c.UseInMemoryDatabase("AspnetRunConnection"));
-builder.Services.AddDbContext<AspnetRunContext>(c =>
-    c.UseSqlServer(builder.Configuration.GetConnectionString("AspnetRunConnection")));
+builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
+{
+  c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
 
-// add repository dependecy
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ICartRepository, CartRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IContactRepository, ContactRepository>();
+builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
+{
+  c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
+
+builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
+{
+  c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]);
+});
 
 builder.Services.AddRazorPages();
 
