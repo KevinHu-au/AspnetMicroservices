@@ -1,28 +1,12 @@
 
 using System.Reflection;
 using AspnetRunBasics.Services;
+using Common.Logging;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, configuration) =>
-{
-    configuration
-        .Enrich.FromLogContext()
-        .Enrich.WithMachineName()
-        .WriteTo.Console()
-        .WriteTo.Elasticsearch(
-            new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(new Uri(context.Configuration["ElasticConfiguration:Uri"]))
-            {
-                IndexFormat = $"applogs-{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{context.HostingEnvironment.EnvironmentName?.ToLower().Replace(".", "-")}-logs-{DateTime.UtcNow:yyyy-MM}",
-                AutoRegisterTemplate = true,
-                NumberOfShards = 2,
-                NumberOfReplicas = 1
-            })
-        .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
-        //Read loging configuration from AppSetting.json
-        .ReadFrom.Configuration(context.Configuration);
-});
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
