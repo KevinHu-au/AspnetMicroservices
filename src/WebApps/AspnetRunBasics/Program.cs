@@ -1,5 +1,3 @@
-
-using System.Reflection;
 using AspnetRunBasics.Services;
 using Common.Logging;
 using Serilog;
@@ -7,22 +5,16 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog(SeriLogger.Configure);
-
+builder.Services.AddTransient<LoggingDelegatingHandler>();
 var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
-builder.Services.AddHttpClient<ICatalogService, CatalogService>(c =>
-{
-    c.BaseAddress = new Uri(gatewayAddress);
-});
+builder.Services.AddHttpClient<ICatalogService, CatalogService>(c => c.BaseAddress = new Uri(gatewayAddress))
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
-builder.Services.AddHttpClient<IBasketService, BasketService>(c =>
-{
-    c.BaseAddress = new Uri(gatewayAddress);
-});
+builder.Services.AddHttpClient<IBasketService, BasketService>(c => c.BaseAddress = new Uri(gatewayAddress))
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
-builder.Services.AddHttpClient<IOrderService, OrderService>(c =>
-{
-    c.BaseAddress = new Uri(gatewayAddress);
-});
+builder.Services.AddHttpClient<IOrderService, OrderService>(c => c.BaseAddress = new Uri(gatewayAddress))
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
 builder.Services.AddRazorPages();
 
