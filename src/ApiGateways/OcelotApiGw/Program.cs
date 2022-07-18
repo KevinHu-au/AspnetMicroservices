@@ -3,6 +3,8 @@ using Microsoft.VisualBasic.CompilerServices;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
+using Common.Logging;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +13,14 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
     config.AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true);
 });
 
-builder.Host.ConfigureLogging((hostingContext, loggingBuilder) => 
-{
-    loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-    loggingBuilder.AddConsole();
-    loggingBuilder.AddDebug();
-});
+
+builder.Host.UseSerilog(SeriLogger.Configure);
+// builder.Host.ConfigureLogging((hostingContext, loggingBuilder) => 
+// {
+//     loggingBuilder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+//     loggingBuilder.AddConsole();
+//     loggingBuilder.AddDebug();
+// });
 
 builder.Services
        .AddOcelot()
