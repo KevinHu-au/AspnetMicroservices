@@ -5,6 +5,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog(SeriLogger.Configure);
+
 builder.Services.AddTransient<LoggingDelegatingHandler>();
 var gatewayAddress = builder.Configuration["ApiSettings:GatewayAddress"];
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(c => c.BaseAddress = new Uri(gatewayAddress))
