@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Polly;
+using Serilog;
 
 namespace Ordering.API.Extensions
 {
@@ -18,7 +20,15 @@ namespace Ordering.API.Extensions
                 try
                 {
                     logger.LogInformation("Migrating the database with context {DbContextName}", typeof(TContext));
-                    InvokeSeeder(seeder, context, services);
+                    var retry = Policy.Handle<SqlException>()
+                                      .WaitAndRetry(
+                                            retryCount: 5, 
+                                            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                                            onRetry: (exception, retryTime, context) => 
+                                            {
+                                                Log.Error($"Retry {retryTime} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                                            });
+                    retry.Execute(() => InvokeSeeder(seeder, context, services));
                     logger.LogInformation("Migrated the database with context {DbContextName}", typeof(TContext));
                 }
                 catch (SqlException ex)
