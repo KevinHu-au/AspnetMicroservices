@@ -3,7 +3,10 @@ using Basket.API.GrpcServices;
 using Basket.API.Repositories;
 using Common.Logging;
 using Discount.Grpc.Client;
+using HealthChecks.UI.Client;
 using MassTransit;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +18,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddHealthChecks()
+                .AddRedis(
+                    builder.Configuration["CacheSettings:ConnectionString"],
+                    "Redis Health",
+                    HealthStatus.Degraded)
+                .AddRabbitMQ(
+                    builder.Configuration["EventBusSettings:HostAddress"],
+                    name: "RabbitMQ Health",
+                    failureStatus:HealthStatus.Degraded);
 
 //Redis
 builder.Services.AddStackExchangeRedisCache(opt =>
@@ -49,5 +62,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/hc", new HealthCheckOptions()
+                            {
+                                Predicate = _ => true,
+                                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                            });
 
 app.Run();
